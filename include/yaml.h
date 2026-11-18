@@ -490,6 +490,7 @@ YAML_DECLARE(int)
 yaml_stream_start_event_initialize(yaml_event_t *event,
         yaml_encoding_t encoding);
 
+
 /**
  * Create the STREAM-END event.
  *
@@ -1355,6 +1356,20 @@ yaml_parser_set_input_string(yaml_parser_t *parser,
 
 YAML_DECLARE(void)
 yaml_parser_set_input_file(yaml_parser_t *parser, FILE *file);
+
+/**
+ * Create the STREAM-CALLBACK event.
+ *
+ * @param[out]      event       An empty event object.
+ * @param[in]       encoding    The stream encoding.
+ *
+ * @returns @c 1 if the function succeeded, @c 0 on error.
+ */
+
+YAML_DECLARE(int)
+yaml_stream_callback_register(yaml_parser_t* parser,
+        yaml_event_t *event,
+        int (*_cb_onEvent)(yaml_parser_t*, yaml_event_t*));
 
 /**
  * Set a generic input handler.

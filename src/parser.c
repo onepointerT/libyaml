@@ -185,7 +185,15 @@ yaml_parser_parse(yaml_parser_t *parser, yaml_event_t *event)
 
     /* Generate the next event. */
 
-    return yaml_parser_state_machine(parser, event);
+    int parser_state_machine_retval
+        = yaml_parser_state_machine(parser, event);
+    
+    if ( parser_state_machine_retval == 1 && _event_handler_f != NULL ) {
+        assert(_event_handler_f); /* Non-NULL function pointer is expected */
+        
+        return _event_handler_f(parser, event);
+    }
+    return parser_state_machine_retval;
 }
 
 /*
