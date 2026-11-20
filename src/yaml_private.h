@@ -109,6 +109,8 @@ typedef int (*_cb_event_handler_f)(yaml_parser_t*, yaml_event_t*);
 inline static _cb_event_handler_f _event_handler_f = NULL;
 typedef int (*_cb_emitter_handler_f)(yaml_emitter_t*, yaml_event_t*);
 inline static _cb_emitter_handler_f _emitter_handler_f = NULL;
+typedef int (*_cb_node_handler_f)(yaml_node_t*);
+inline static _cb_node_handler_f _node_handler_f = NULL;
 
 /*
  * String management.

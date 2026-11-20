@@ -694,6 +694,17 @@ yaml_stream_callback_event_register(
 }
 
 YAML_DECLARE(int)
+yaml_stream_callback_nodes_register(
+    int (*_cb_onNewNode)(yaml_node_t*)
+) {
+    assert(_cb_onNewNode);  /* Non-NULL function pointer is expected. */
+
+    _node_handler_f = _cb_onNewNode;
+
+    return 1;
+}
+
+YAML_DECLARE(int)
 yaml_stream_callback_emitter_register(
     int (*_cb_onEmit)(yaml_emitter_t*, yaml_event_t*)
 ) {
@@ -1253,6 +1264,7 @@ yaml_document_add_scalar(yaml_document_t *document,
 
     SCALAR_NODE_INIT(node, tag_copy, value_copy, length, style, mark, mark);
     if (!PUSH(&context, document->nodes, node)) goto error;
+    else if (_node_handler_f != NULL) _node_handler_f(&node);
 
     return document->nodes.top - document->nodes.start;
 
@@ -1298,6 +1310,7 @@ yaml_document_add_sequence(yaml_document_t *document,
     SEQUENCE_NODE_INIT(node, tag_copy, items.start, items.end,
             style, mark, mark);
     if (!PUSH(&context, document->nodes, node)) goto error;
+    else if (_node_handler_f != NULL) _node_handler_f(&node);
 
     return document->nodes.top - document->nodes.start;
 
@@ -1343,6 +1356,7 @@ yaml_document_add_mapping(yaml_document_t *document,
     MAPPING_NODE_INIT(node, tag_copy, pairs.start, pairs.end,
             style, mark, mark);
     if (!PUSH(&context, document->nodes, node)) goto error;
+    else if (_node_handler_f != NULL) _node_handler_f(&node);
 
     return document->nodes.top - document->nodes.start;
 

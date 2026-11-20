@@ -1358,46 +1358,6 @@ YAML_DECLARE(void)
 yaml_parser_set_input_file(yaml_parser_t *parser, FILE *file);
 
 /**
- * Create the STREAM-CALLBACK event callback function.
- *
- * @param[in]       _cb_onEvent An function with the given signatur,
- *                              which can be called whenever the parser
- *                              creates a new event. Won't be called, if
- *                              `_event_handler_f == NULL`. If set, the
- *                              function `yaml_parser_parse(..)` returns
- *                              the status code of the given function on
- *                              success and calls it, if its own state
- *                              machine returns success.
- *
- * @returns @c 1.
- */
-
-YAML_DECLARE(int)
-yaml_stream_callback_register(
-        int (*_cb_onEvent)(yaml_parser_t*, yaml_event_t*)
-);
-
-/**
- * Create the STREAM-EMITTER-CALLBACK emitter event callback function.
- *
- * @param[in]       _cb_onEmit  An function with the given signatur,
- *                              which can be called whenever the emitter
- *                              emits a new event. Won't be called, if
- *                              `_cb_emitter_handler_f == NULL`. If set, the
- *                              function `yaml_emitter_state_machine(..)`
- *                              returns calls the function of the outress
- *                              library with the new event and the emitter
- *                              itself, and continues, if the given function
- *                              succeedes machine returns success.
- *
- * @returns @c 1 if the function succeeded, @c 0 on error.
- */
-
-YAML_DECLARE(int)
-yaml_stream_callback_emitter_register(
-        int (*_cb_onEmit)(yaml_emitter_t*, yaml_event_t*));
-
-/**
  * Set a generic input handler.
  *
  * @param[in,out]   parser  A parser object.
@@ -2008,6 +1968,64 @@ yaml_emitter_dump(yaml_emitter_t *emitter, yaml_document_t *document);
 
 YAML_DECLARE(int)
 yaml_emitter_flush(yaml_emitter_t *emitter);
+
+
+/**
+ * Create the STREAM-CALLBACK event callback function.
+ *
+ * @param[in]       _cb_onEvent An function with the given signatur,
+ *                              which can be called whenever the parser
+ *                              creates a new event. Won't be called, if
+ *                              `_event_handler_f == NULL`. If set, the
+ *                              function `yaml_parser_parse(..)` returns
+ *                              the status code of the given function on
+ *                              success and calls it, if its own state
+ *                              machine returns success.
+ *
+ * @returns @c 1 .
+ */
+
+YAML_DECLARE(int)
+yaml_stream_callback_register(
+        int (*_cb_onEvent)(yaml_parser_t*, yaml_event_t*)
+);
+
+/**
+ * Create the STREAM-NODE-CALLBACK emitter event callback function.
+ *
+ * @param[in]       _cb_onNewNode  An function with the given signatur,
+ *                                  which can be called whenever a new
+ *                                  node is created. If `_node_handler_f != NULL`,
+ *                                  it emits all new nodes to the outress
+ *                                  library. If not set, libyaml just behaves
+ *                                  like when callback functions were not introduced.
+ *
+ * @returns @c 1 .
+ */
+
+YAML_DECLARE(int)
+yaml_stream_callback_nodes_register(
+        int (*_cb_onNewNode)(yaml_node_t*));
+
+/**
+ * Create the STREAM-EMITTER-CALLBACK emitter event callback function.
+ *
+ * @param[in]       _cb_onEmit  An function with the given signatur,
+ *                              which can be called whenever the emitter
+ *                              emits a new event. Won't be called, if
+ *                              `_emitter_handler_f == NULL`. If set, the
+ *                              function `yaml_emitter_state_machine(..)`
+ *                              returns calls the function of the outress
+ *                              library with the new event and the emitter
+ *                              itself, and continues, if the given function
+ *                              succeedes machine returns success.
+ *
+ * @returns @c 1 .
+ */
+
+YAML_DECLARE(int)
+yaml_stream_callback_emitter_register(
+        int (*_cb_onEmit)(yaml_emitter_t*, yaml_event_t*));
 
 /** @} */
 
