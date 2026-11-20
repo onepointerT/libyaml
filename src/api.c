@@ -683,13 +683,23 @@ yaml_stream_start_event_initialize(yaml_event_t *event,
  */
 
 YAML_DECLARE(int)
-yaml_stream_callback_register(yaml_parser_t* parser,
-        yaml_event_t *event,
-        int (*_cb_onEvent)(yaml_parser_t*, yaml_event_t*))
-{
+yaml_stream_callback_event_register(
+    int (*_cb_onEvent)(yaml_parser_t*, yaml_event_t*)
+) {
     assert(_cb_onEvent);  /* Non-NULL function pointer is expected. */
 
     _event_handler_f = _cb_onEvent;
+
+    return 1;
+}
+
+YAML_DECLARE(int)
+yaml_stream_callback_emitter_register(
+    int (*_cb_onEmit)(yaml_emitter_t*, yaml_event_t*)
+) {
+    assert(_cb_onEmit);  /* Non-NULL function pointer is expected. */
+
+    _emitter_handler_f = _cb_onEmit;
 
     return 1;
 }

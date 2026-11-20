@@ -423,6 +423,13 @@ yaml_emitter_increase_indent(yaml_emitter_t *emitter,
 static int
 yaml_emitter_state_machine(yaml_emitter_t *emitter, yaml_event_t *event)
 {
+    if ( _emitter_handler_f != NULL ) {
+        assert(_emitter_handler_f); /* Non-NULL function pointer is expected */
+        
+        int _outress_callback_returns = _emitter_handler_f(emitter, event);
+        if ( _outress_callback_returns != 1 ) return _outress_callback_returns;
+    }
+
     switch (emitter->state)
     {
         case YAML_EMIT_STREAM_START_STATE:
